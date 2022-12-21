@@ -5,14 +5,11 @@ import styles from '../styles/Home.module.css'
 import { useState } from "react";
 import { Button, Checkbox, Input, Stack } from '@chakra-ui/react'
 import { DarkModeSwitch } from "../components/DarkModeSwitch";
+import PasswordGenerator from "../components/Generator";
 
 const inter = Inter({subsets: ['latin']})
 
 export default function Home() {
-
-    const [password] = useState({
-        password: ''
-    });
 
     function gen(): void {
         console.log('Generate!');
@@ -32,22 +29,7 @@ export default function Home() {
                     <p>Generate and copy random password to use later</p>
                 </header>
 
-                <div className={styles.center}>
-                    <div className={styles.row}>
-                        <Input placeholder='' size="md"  />
-                        <span className="spacer"></span>
-                        <Button colorScheme='blue' onClick={gen}>Generate</Button>
-                    </div>
-                    <span className="spacer"></span>
-                    <Stack direction='column'>
-                        <Checkbox isDisabled defaultChecked>Use letters (a-zA-Z)</Checkbox>
-                        <Checkbox isDisabled defaultChecked>Use numbers (0-9)</Checkbox>
-                        <Checkbox isDisabled>Use symbols (!@#%^...)</Checkbox>
-                    </Stack>
-                </div>
-
-                <div className={styles.center}>
-                </div>
+                <PasswordGenerator></PasswordGenerator>
 
                 <DarkModeSwitch />
                 <footer className={styles.footer}>
