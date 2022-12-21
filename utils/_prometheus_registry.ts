@@ -5,7 +5,7 @@ import { Registry, collectDefaultMetrics } from 'prom-client';
 const register = new Registry();
 // Add a default label which is added to all metrics
 register.setDefaultLabels({
-    app: 'control-plane-react-ui'
+    app: 'password-generator-nextjs-app'
 });
 // collect default metrics with registry
 collectDefaultMetrics({
