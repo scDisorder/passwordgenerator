@@ -20,7 +20,7 @@ export default function Home() {
         <>
             <Head>
                 <title>Password Generator</title>
-                <meta name="description" content="Generated random password"/>
+                <meta name="description" content="Generate random password"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
