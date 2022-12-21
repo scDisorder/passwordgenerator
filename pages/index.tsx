@@ -3,9 +3,10 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import { useState } from "react";
-import { Button, Checkbox, Input, Stack } from '@chakra-ui/react'
+import { Button, Checkbox, Input, Link, Stack } from '@chakra-ui/react'
 import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import PasswordGenerator from "../components/Generator";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -33,8 +34,15 @@ export default function Home() {
 
                 <DarkModeSwitch />
                 <footer className={styles.footer}>
-                    <p className={inter.className}>Powered by <a href="https://vercel.com" target="_blank"
-                                                                 rel="noopener noreferrer">Vercel</a></p>
+                    <Link href='https://github.com/scDisorder/passwordgenerator' isExternal>
+                        View source code (GitHub) <ExternalLinkIcon mx='2px' />
+                    </Link>
+                    <Link href='https://chakra-ui.com' isExternal>
+                        Chakra Design system <ExternalLinkIcon mx='2px' />
+                    </Link>
+                    <Link href='https://vercel.com' isExternal>
+                        Vercel <ExternalLinkIcon mx='2px' />
+                    </Link>
                 </footer>
             </main>
         </>
