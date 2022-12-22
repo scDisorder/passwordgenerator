@@ -24,7 +24,10 @@ export default function Home() {
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
+
             <main className={styles.main}>
+                <DarkModeSwitch />
+
                 <header className={styles.header}>
                     <h1 className={inter.className}>Password generator</h1>
                     <p>Generate and copy random password to use later</p>
@@ -32,7 +35,6 @@ export default function Home() {
 
                 <PasswordGenerator></PasswordGenerator>
 
-                <DarkModeSwitch />
                 <footer className={styles.footer}>
                     <Link href='https://github.com/scDisorder/passwordgenerator' isExternal>
                         View source code (GitHub) <ExternalLinkIcon mx='2px' />
