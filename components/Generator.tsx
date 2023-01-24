@@ -3,7 +3,6 @@ import {
     Button,
     Checkbox,
     Flex,
-    Input,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -11,6 +10,7 @@ import {
     NumberInputStepper,
     Stack,
     Text,
+    Textarea,
     useClipboard
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -19,7 +19,8 @@ const letters = 'qwertyuiopasdfghjklzxcvbnm';
 const numbers = '0123456789';
 const specials = '!@#$%^&*()_-+=?;:][{}';
 
-function generateString(src: string, len: number): string {
+function generateString(src: string, len: number = 8): string {
+    console.log(src, len);
     let result = '';
     for (let i = 0; i < len; i++) {
         const randInd = Math.floor(Math.random() * src.length);
@@ -70,7 +71,7 @@ const defaultState: GeneratorOpts = {
 function generatePassword(opts: GeneratorOpts): string {
     return generateString(
         getSrcString(opts.letters, opts.lettersCap, opts.numbers, opts.specials),
-        length
+        opts.length
     );
 }
 
@@ -130,17 +131,16 @@ export const PasswordGenerator = () => {
                     }))
                 }}>Generate passphrase</Button>
                 <span className="spacer"></span>
-                <Flex mb={2}>
-                    <Input
+                <Stack>
+                    <Textarea resize={'none'}
                         value={value}
                         onChange={(e) => {
                             setValue(e.target.value);
                         }}
                         mr={2}
                     />
-                    <span className="spacer"></span>
                     <Button onClick={onCopy}>{hasCopied ? "Copied!" : "Copy"}</Button>
-                </Flex>
+                </Stack>
             </div>
         </>
     )
