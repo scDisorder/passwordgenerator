@@ -68,17 +68,10 @@ const defaultState: GeneratorOpts = {
 };
 
 function generatePassword(opts: GeneratorOpts): string {
-    console.log(opts);
-    const pass = generateString(
+    return generateString(
         getSrcString(opts.letters, opts.lettersCap, opts.numbers, opts.specials),
         length
     );
-    console.log(pass);
-    return pass;
-    // return generateString(
-    //     getSrcString(opts.letters, opts.lettersCap, opts.numbers, opts.specials),
-    //     length
-    // );
 }
 
 export const PasswordGenerator = () => {
