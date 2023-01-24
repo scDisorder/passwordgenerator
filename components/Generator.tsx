@@ -2,17 +2,20 @@ import styles from "../styles/Home.module.css";
 import {
     Button,
     Checkbox,
-    Flex, HStack,
-    Input, NumberDecrementStepper,
+    Flex,
+    Input,
+    NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
-    NumberInputField, NumberInputStepper,
+    NumberInputField,
+    NumberInputStepper,
     Stack,
+    Text,
     useClipboard
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const letters = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+const letters = 'qwertyuiopasdfghjklzxcvbnm';
 const numbers = '0123456789';
 const specials = '!@#$%^&*()_-+=?;:][{}';
 
@@ -26,13 +29,17 @@ function generateString(src: string, len: number): string {
 }
 
 function getSrcString(
-    enableLetters: boolean,
-    enableNumbers: boolean,
-    enableSpecials: boolean,
-    length: number): string {
+    enableLetters: boolean = true,
+    enableCapitalizedLetters: boolean = true,
+    enableNumbers: boolean = true,
+    enableSpecials: boolean = false
+): string {
     let str = '';
     if (enableLetters) {
         str += letters;
+    }
+    if (enableCapitalizedLetters) {
+        str += letters.toUpperCase();
     }
     if (enableNumbers) {
         str += numbers;
@@ -40,8 +47,38 @@ function getSrcString(
     if (enableSpecials) {
         str += specials;
     }
-    console.log('get src string', str);
-    return generateString(str, length);
+    return str;
+}
+
+interface GeneratorOpts {
+    length?: number;
+    letters?: boolean;
+    lettersCap?: boolean;
+    numbers?: boolean;
+    specials?: boolean;
+    save?: boolean;
+}
+
+const defaultState: GeneratorOpts = {
+    length: 16,
+    letters: true,
+    lettersCap: true,
+    numbers: true,
+    specials: false,
+};
+
+function generatePassword(opts: GeneratorOpts): string {
+    console.log(opts);
+    const pass = generateString(
+        getSrcString(opts.letters, opts.lettersCap, opts.numbers, opts.specials),
+        length
+    );
+    console.log(pass);
+    return pass;
+    // return generateString(
+    //     getSrcString(opts.letters, opts.lettersCap, opts.numbers, opts.specials),
+    //     length
+    // );
 }
 
 export const PasswordGenerator = () => {
@@ -49,12 +86,57 @@ export const PasswordGenerator = () => {
     const {onCopy, value, setValue, hasCopied} = useClipboard("");
     const [length, setLength] = useState(16);
     const [enableLetters, setEnableLetters] = useState(true);
+    const [enableLettersCap, setEnableLettersCap] = useState(true);
     const [enableNumbers, setEnableNumbers] = useState(true);
-    const [enableSpecials, setEnableSpecials] = useState(false);
+    const [enableSpecials, setEnableSpecials] = useState(true);
 
     return (
         <>
             <div className={styles.center}>
+                <Stack direction='column'>
+                    <Text>Specify password length:</Text>
+                    <NumberInput defaultValue={16} onChange={(e) => {
+                        setLength(parseInt(e, 10))
+                    }} min={6} max={256}>
+                        <NumberInputField/>
+                        <NumberInputStepper>
+                            <NumberIncrementStepper/>
+                            <NumberDecrementStepper/>
+                        </NumberInputStepper>
+                    </NumberInput>
+                </Stack>
+                <span className="spacer"></span>
+                <Text>Extra conditions:</Text>
+                <Stack direction='column'>
+                    <Checkbox defaultChecked={enableLetters}
+                              onChange={(e) => {
+                                  setEnableLetters(!enableLetters)
+                              }}>Use letters (a-z)</Checkbox>
+                    <Checkbox defaultChecked={enableLettersCap}
+                              onChange={(e) => {
+                                  setEnableLettersCap(!enableLettersCap)
+                              }}>Use letters (A-Z)</Checkbox>
+                    <Checkbox defaultChecked={enableNumbers}
+                              onChange={(e) => {
+                                  setEnableNumbers(!enableNumbers)
+                              }}>Use numbers (0-9)</Checkbox>
+                    <Checkbox defaultChecked={enableSpecials}
+                              onChange={(e) => {
+                                  setEnableSpecials(!enableSpecials)
+                              }}>Use symbols (!@#%^...)</Checkbox>
+                </Stack>
+                <span className="spacer"></span>
+                <span className="spacer"></span>
+                <Button colorScheme='blue' onClick={(e) => {
+                    setValue(generatePassword({
+                        length,
+                        letters: enableLetters,
+                        lettersCap: enableLettersCap,
+                        numbers: enableNumbers,
+                        specials: enableSpecials,
+                    }))
+                }}>Generate passphrase</Button>
+                <span className="spacer"></span>
                 <Flex mb={2}>
                     <Input
                         value={value}
@@ -66,31 +148,6 @@ export const PasswordGenerator = () => {
                     <span className="spacer"></span>
                     <Button onClick={onCopy}>{hasCopied ? "Copied!" : "Copy"}</Button>
                 </Flex>
-                <span className="spacer"></span>
-                <Flex mb={2}>
-                    <HStack maxW="100px">
-                        <NumberInput defaultValue={16} onChange={(e) => {setLength(parseInt(e, 10))}} min={6} max={256}>
-                            <NumberInputField />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
-                    </HStack>
-                    <span className="spacer"></span>
-                    <Button colorScheme='blue' onClick={(e) => {
-                        setValue(getSrcString(enableLetters, enableNumbers, enableSpecials, length))
-                    }}>Generate</Button>
-                </Flex>
-                <span className="spacer"></span>
-                <Stack direction='column'>
-                    <Checkbox defaultChecked={enableLetters}
-                              onChange={(e) => {setEnableLetters(!enableLetters)}}>Use letters (a-zA-Z)</Checkbox>
-                    <Checkbox defaultChecked={enableNumbers}
-                              onChange={(e) => {setEnableNumbers(!enableNumbers)}}>Use numbers (0-9)</Checkbox>
-                    <Checkbox defaultChecked={enableSpecials}
-                              onChange={(e) => {setEnableSpecials(!enableSpecials)}}>Use symbols (!@#%^...)</Checkbox>
-                </Stack>
             </div>
         </>
     )
